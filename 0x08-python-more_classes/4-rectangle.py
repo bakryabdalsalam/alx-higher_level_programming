@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # 4-rectangle.py
-# Asmamaw Yismaw
+# Bakry Abdalsalam
 """Defines a Rectangle class."""
 
 
