@@ -1,5 +1,5 @@
 #!/usr/bin/node
-// function that returns the number of occurrences in a list
+//script that imports a dictionary of occurrences by user id and computes a dictionary of user ids by occurrence.
 
 const { dict } = require('./101-data.js');
 
