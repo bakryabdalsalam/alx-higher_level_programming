@@ -1,55 +1,21 @@
 #!/usr/bin/node
-
 const request = require('request');
+const BASE_URL = 'https://swapi-api.hbtn.io/api';
 
-const movieId = process.argv[2];
+if (process.argv.length > 2) {
+  request(`${BASE_URL}/films/${process.argv[2]}/`, (err, res, body) => {
+    if (err) {
+      console.log(err);
+    }
+    const charactersURL = JSON.parse(body).characters;
 
-const SWAPI_BASE_URL = 'https://swapi.dev/api';
-
-// Function to fetch characters for a given movie ID
-function getCharactersForMovie(movieId) {
-  return new Promise((resolve, reject) => {
-    const url = `${SWAPI_BASE_URL}/films/${movieId}/`;
-    request(url, (error, response, body) => {
-      if (error) {
-        reject(error);
-      } else {
-        const data = JSON.parse(body);
-        resolve(data.characters);
-      }
+    charactersURL.forEach(element => {
+      request(element, (err, res, body) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(JSON.parse(body).name);
+      });
     });
   });
 }
-
-// Function to fetch character details from their URLs
-function getCharacterDetails(characterUrls) {
-  return Promise.all(
-    characterUrls.map((url) => {
-      return new Promise((resolve, reject) => {
-        request(url, (error, response, body) => {
-          if (error) {
-            reject(error);
-          } else {
-            const data = JSON.parse(body);
-            resolve(data.name);
-          }
-        });
-      });
-    })
-  );
-}
-
-// Main function to fetch characters and display their names
-async function main() {
-  try {
-    const characterUrls = await getCharactersForMovie(movieId);
-    const characterNames = await getCharacterDetails(characterUrls);
-    characterNames.forEach((name) => {
-      console.log(name);
-    });
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-main();
